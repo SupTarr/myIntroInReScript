@@ -9,66 +9,28 @@ import '../../../../input.css'
 var files = "my.song.mp3 11b\ngreatSong.flac 1000b\nnot3.txt 5b\nvideo.mp4 200b\ngame.exe 100b\nmov!e.mkv 10000b";
 
 var fileSizeCalculation = (function (fileList) {
-    const lists = fileList.split("\n");
-    const listName = [];
-    const listSize = [];
-    lists.forEach((list) => {
-      if (list) {
-        const temp = list.split(" ");
-        if (temp) {
-          listName.push(temp[0]);
-          listSize.push(temp[1]);
-        }
+    let resultSize = [0, 0, 0, 0];
+    fileList.split("\n").forEach((list) => {
+      const temp = list.split(" ");
+      const typeArr = temp[0].split(".");
+      const type = typeArr[typeArr.length - 1];
+      const size = temp[1].split("b");
+      if (type === "mp3" || type === "aac" || type === "flac") {
+        resultSize[0] += parseInt(size[0]);
+      } else if (type === "jpg" || type === "bmp" || type === "gif") {
+        resultSize[1] += parseInt(size[0]);
+      } else if (type === "mp4" || type === "avi" || type === "mkv") {
+        resultSize[2] += parseInt(size[0]);
+      } else {
+        resultSize[3] += parseInt(size[0]);
       }
     });
-    const resultType = [];
-    const resultSize = [];
-    for (let i = 0; i < listName.length; i++) {
-      if (listName[i]) {
-        let type = listName[i].split(".");
-        console.log(type);
-        if (type.length > 1) {
-          type = type[type.length - 1];
-          if (listSize[i]) {
-            let size = listSize[i].split("b");
-            if (size.length > 1) {
-              resultSize.push(size[0]);
-            }
-          }
-        }
-        if (type === "mp3" || type === "aac" || type === "flac") {
-          resultType.push("music");
-        } else if (type === "jpg" || type === "bmp" || type === "gif") {
-          resultType.push("images");
-        } else if (type === "mp4" || type === "avi" || type === "mkv") {
-          resultType.push("movies");
-        } else {
-          resultType.push("other");
-        }
-      } else {
-        listName.pop(i);
-      }
-    }
-    let musicSize = 0;
-    let imagesSize = 0;
-    let moviesSize = 0;
-    let otherSize = 0;
-    for (let i = 0; i < listName.length; i++) {
-      if (resultType[i] === "music") {
-        musicSize += parseInt(listSize[i]);
-      } else if (resultType[i] === "images") {
-        imagesSize += parseInt(listSize[i]);
-      } else if (resultType[i] === "movies") {
-        moviesSize += parseInt(listSize[i]);
-      } else {
-        otherSize += parseInt(listSize[i]);
-      }
-    }
+
     let result = [];
-    result.push("music " + musicSize + "b");
-    result.push("images " + imagesSize + "b");
-    result.push("movies " + moviesSize + "b");
-    result.push("other " + otherSize + "b");
+    result.push("music " + resultSize[0] + "b");
+    result.push("images " + resultSize[1] + "b");
+    result.push("movies " + resultSize[2] + "b");
+    result.push("other " + resultSize[3] + "b");
     return result;
   });
 
@@ -113,7 +75,7 @@ function FileSizeCalculation(Props) {
                           onChange: handleFilesListChange
                         })), React.createElement("pre", {
                       className: "transition max-w-[500px] h-[400px] mx-5 mb-3 p-5 overflow-scroll bg-red-300 rounded-xl drop-shadow-lg hover:drop-shadow-2xl"
-                    }, React.createElement("code", undefined, "function (fileList) {\n  const lists = fileList.split(\"\\n\");\n  const listName = [];\n  const listSize = [];\n  lists.forEach((list) => {\n    if (list) {\n      const temp = list.split(\" \");\n      if (temp) {\n        listName.push(temp[0]);\n        listSize.push(temp[1]);\n      }\n    }\n  });\n  const resultType = [];\n  const resultSize = [];\n  for (let i = 0; i < listName.length; i++) {\n    if (listName[i]) {\n      let type = listName[i].split(\".\");\n      console.log(type);\n      if (type.length > 1) {\n        type = type[type.length - 1];\n        if (listSize[i]) {\n          let size = listSize[i].split(\"b\");\n          if (size.length > 1) {\n            resultSize.push(size[0]);\n          }\n        }\n      }\n      if (type === \"mp3\" || type === \"aac\" || type === \"flac\") {\n        resultType.push(\"music\");\n      } else if (type === \"jpg\" || type === \"bmp\" || type === \"gif\") {\n        resultType.push(\"images\");\n      } else if (type === \"mp4\" || type === \"avi\" || type === \"mkv\") {\n        resultType.push(\"movies\");\n      } else {\n        resultType.push(\"other\");\n      }\n    } else {\n      listName.pop(i);\n    }\n  }\n  let musicSize = 0;\n  let imagesSize = 0;\n  let moviesSize = 0;\n  let otherSize = 0;\n  for (let i = 0; i < listName.length; i++) {\n    if (resultType[i] === \"music\") {\n      musicSize += parseInt(listSize[i]);\n    } else if (resultType[i] === \"images\") {\n      imagesSize += parseInt(listSize[i]);\n    } else if (resultType[i] === \"movies\") {\n      moviesSize += parseInt(listSize[i]);\n    } else {\n      otherSize += parseInt(listSize[i]);\n    }\n  }\n  let result = [];\n  result.push(\"music \" + musicSize + \"b\");\n  result.push(\"images \" + imagesSize + \"b\");\n  result.push(\"movies \" + moviesSize + \"b\");\n  result.push(\"other \" + otherSize + \"b\");\n  return result;\n}\n")), fileSizeCalitems.length !== 0 ? React.createElement("div", {
+                    }, React.createElement("code", undefined, "function (fileList) {\n  let resultSize = [0, 0, 0, 0];\n  fileList.split(\"\\n\").forEach((list) => {\n    const temp = list.split(\" \");\n    const typeArr = temp[0].split(\".\");\n    const type = typeArr[typeArr.length - 1];\n    const size = temp[1].split(\"b\");\n    if (type === \"mp3\" || type === \"aac\" || type === \"flac\") {\n      resultSize[0] += parseInt(size[0]);\n    } else if (type === \"jpg\" || type === \"bmp\" || type === \"gif\") {\n      resultSize[1] += parseInt(size[0]);\n    } else if (type === \"mp4\" || type === \"avi\" || type === \"mkv\") {\n      resultSize[2] += parseInt(size[0]);\n    } else {\n      resultSize[3] += parseInt(size[0]);\n    }\n  });\n\n  let result = [];\n  result.push(\"music \" + resultSize[0] + \"b\");\n  result.push(\"images \" + resultSize[1] + \"b\");\n  result.push(\"movies \" + resultSize[2] + \"b\");\n  result.push(\"other \" + resultSize[3] + \"b\");\n  return result;\n}\n")), fileSizeCalitems.length !== 0 ? React.createElement("div", {
                         className: "transition min-w-[150px] h-[150px] mx-5 mb-3 p-5 bg-red-200 rounded-xl overflow-y-scroll drop-shadow-lg hover:drop-shadow-2xl"
                       }, fileSizeCalitems) : React.createElement(React.Fragment, undefined)));
 }

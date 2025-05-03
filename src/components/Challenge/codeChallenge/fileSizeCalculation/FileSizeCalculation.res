@@ -10,66 +10,28 @@ mov!e.mkv 10000b`
 
 let fileSizeCalculation = %raw(`
   function (fileList) {
-    const lists = fileList.split("\n");
-    const listName = [];
-    const listSize = [];
-    lists.forEach((list) => {
-      if (list) {
-        const temp = list.split(" ");
-        if (temp) {
-          listName.push(temp[0]);
-          listSize.push(temp[1]);
-        }
+    let resultSize = [0, 0, 0, 0];
+    fileList.split("\n").forEach((list) => {
+      const temp = list.split(" ");
+      const typeArr = temp[0].split(".");
+      const type = typeArr[typeArr.length - 1];
+      const size = temp[1].split("b");
+      if (type === "mp3" || type === "aac" || type === "flac") {
+        resultSize[0] += parseInt(size[0]);
+      } else if (type === "jpg" || type === "bmp" || type === "gif") {
+        resultSize[1] += parseInt(size[0]);
+      } else if (type === "mp4" || type === "avi" || type === "mkv") {
+        resultSize[2] += parseInt(size[0]);
+      } else {
+        resultSize[3] += parseInt(size[0]);
       }
     });
-    const resultType = [];
-    const resultSize = [];
-    for (let i = 0; i < listName.length; i++) {
-      if (listName[i]) {
-        let type = listName[i].split(".");
-        console.log(type);
-        if (type.length > 1) {
-          type = type[type.length - 1];
-          if (listSize[i]) {
-            let size = listSize[i].split("b");
-            if (size.length > 1) {
-              resultSize.push(size[0]);
-            }
-          }
-        }
-        if (type === "mp3" || type === "aac" || type === "flac") {
-          resultType.push("music");
-        } else if (type === "jpg" || type === "bmp" || type === "gif") {
-          resultType.push("images");
-        } else if (type === "mp4" || type === "avi" || type === "mkv") {
-          resultType.push("movies");
-        } else {
-          resultType.push("other");
-        }
-      } else {
-        listName.pop(i);
-      }
-    }
-    let musicSize = 0;
-    let imagesSize = 0;
-    let moviesSize = 0;
-    let otherSize = 0;
-    for (let i = 0; i < listName.length; i++) {
-      if (resultType[i] === "music") {
-        musicSize += parseInt(listSize[i]);
-      } else if (resultType[i] === "images") {
-        imagesSize += parseInt(listSize[i]);
-      } else if (resultType[i] === "movies") {
-        moviesSize += parseInt(listSize[i]);
-      } else {
-        otherSize += parseInt(listSize[i]);
-      }
-    }
+
     let result = [];
-    result.push("music " + musicSize + "b");
-    result.push("images " + imagesSize + "b");
-    result.push("movies " + moviesSize + "b");
-    result.push("other " + otherSize + "b");
+    result.push("music " + resultSize[0] + "b");
+    result.push("images " + resultSize[1] + "b");
+    result.push("movies " + resultSize[2] + "b");
+    result.push("other " + resultSize[3] + "b");
     return result;
   }
 `)
@@ -118,66 +80,28 @@ let make = () => {
         className="transition max-w-[500px] h-[400px] mx-5 mb-3 p-5 overflow-scroll bg-red-300 rounded-xl drop-shadow-lg hover:drop-shadow-2xl">
         <code>
           {React.string(`function (fileList) {
-  const lists = fileList.split("\\n");
-  const listName = [];
-  const listSize = [];
-  lists.forEach((list) => {
-    if (list) {
-      const temp = list.split(" ");
-      if (temp) {
-        listName.push(temp[0]);
-        listSize.push(temp[1]);
-      }
+  let resultSize = [0, 0, 0, 0];
+  fileList.split("\\n").forEach((list) => {
+    const temp = list.split(" ");
+    const typeArr = temp[0].split(".");
+    const type = typeArr[typeArr.length - 1];
+    const size = temp[1].split("b");
+    if (type === "mp3" || type === "aac" || type === "flac") {
+      resultSize[0] += parseInt(size[0]);
+    } else if (type === "jpg" || type === "bmp" || type === "gif") {
+      resultSize[1] += parseInt(size[0]);
+    } else if (type === "mp4" || type === "avi" || type === "mkv") {
+      resultSize[2] += parseInt(size[0]);
+    } else {
+      resultSize[3] += parseInt(size[0]);
     }
   });
-  const resultType = [];
-  const resultSize = [];
-  for (let i = 0; i < listName.length; i++) {
-    if (listName[i]) {
-      let type = listName[i].split(".");
-      console.log(type);
-      if (type.length > 1) {
-        type = type[type.length - 1];
-        if (listSize[i]) {
-          let size = listSize[i].split("b");
-          if (size.length > 1) {
-            resultSize.push(size[0]);
-          }
-        }
-      }
-      if (type === "mp3" || type === "aac" || type === "flac") {
-        resultType.push("music");
-      } else if (type === "jpg" || type === "bmp" || type === "gif") {
-        resultType.push("images");
-      } else if (type === "mp4" || type === "avi" || type === "mkv") {
-        resultType.push("movies");
-      } else {
-        resultType.push("other");
-      }
-    } else {
-      listName.pop(i);
-    }
-  }
-  let musicSize = 0;
-  let imagesSize = 0;
-  let moviesSize = 0;
-  let otherSize = 0;
-  for (let i = 0; i < listName.length; i++) {
-    if (resultType[i] === "music") {
-      musicSize += parseInt(listSize[i]);
-    } else if (resultType[i] === "images") {
-      imagesSize += parseInt(listSize[i]);
-    } else if (resultType[i] === "movies") {
-      moviesSize += parseInt(listSize[i]);
-    } else {
-      otherSize += parseInt(listSize[i]);
-    }
-  }
+
   let result = [];
-  result.push("music " + musicSize + "b");
-  result.push("images " + imagesSize + "b");
-  result.push("movies " + moviesSize + "b");
-  result.push("other " + otherSize + "b");
+  result.push("music " + resultSize[0] + "b");
+  result.push("images " + resultSize[1] + "b");
+  result.push("movies " + resultSize[2] + "b");
+  result.push("other " + resultSize[3] + "b");
   return result;
 }
 `)}
