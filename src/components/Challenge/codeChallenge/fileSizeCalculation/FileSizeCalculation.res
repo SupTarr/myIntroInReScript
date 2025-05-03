@@ -12,7 +12,15 @@ let fileSizeCalculation = %raw(`
   function (fileList) {
     let resultSize = [0, 0, 0, 0];
     fileList.split("\n").forEach((list) => {
+      if (list === "") {
+        return;
+      }
+
       const temp = list.split(" ");
+      if (temp.length !== 2) {
+        return;
+      }
+
       const typeArr = temp[0].split(".");
       const type = typeArr[typeArr.length - 1];
       const size = temp[1].split("b");
@@ -82,7 +90,15 @@ let make = () => {
           {React.string(`function (fileList) {
   let resultSize = [0, 0, 0, 0];
   fileList.split("\\n").forEach((list) => {
+    if (list === "") {
+      return;
+    }
+
     const temp = list.split(" ");
+    if (temp.length !== 2) {
+      return;
+    }
+    
     const typeArr = temp[0].split(".");
     const type = typeArr[typeArr.length - 1];
     const size = temp[1].split("b");

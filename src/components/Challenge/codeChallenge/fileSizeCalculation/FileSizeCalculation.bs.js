@@ -11,7 +11,15 @@ var files = "my.song.mp3 11b\ngreatSong.flac 1000b\nnot3.txt 5b\nvideo.mp4 200b\
 var fileSizeCalculation = (function (fileList) {
     let resultSize = [0, 0, 0, 0];
     fileList.split("\n").forEach((list) => {
+      if (list === "") {
+        return;
+      }
+
       const temp = list.split(" ");
+      if (temp.length !== 2) {
+        return;
+      }
+
       const typeArr = temp[0].split(".");
       const type = typeArr[typeArr.length - 1];
       const size = temp[1].split("b");
@@ -75,7 +83,7 @@ function FileSizeCalculation(Props) {
                           onChange: handleFilesListChange
                         })), React.createElement("pre", {
                       className: "transition max-w-[500px] h-[400px] mx-5 mb-3 p-5 overflow-scroll bg-red-300 rounded-xl drop-shadow-lg hover:drop-shadow-2xl"
-                    }, React.createElement("code", undefined, "function (fileList) {\n  let resultSize = [0, 0, 0, 0];\n  fileList.split(\"\\n\").forEach((list) => {\n    const temp = list.split(\" \");\n    const typeArr = temp[0].split(\".\");\n    const type = typeArr[typeArr.length - 1];\n    const size = temp[1].split(\"b\");\n    if (type === \"mp3\" || type === \"aac\" || type === \"flac\") {\n      resultSize[0] += parseInt(size[0]);\n    } else if (type === \"jpg\" || type === \"bmp\" || type === \"gif\") {\n      resultSize[1] += parseInt(size[0]);\n    } else if (type === \"mp4\" || type === \"avi\" || type === \"mkv\") {\n      resultSize[2] += parseInt(size[0]);\n    } else {\n      resultSize[3] += parseInt(size[0]);\n    }\n  });\n\n  let result = [];\n  result.push(\"music \" + resultSize[0] + \"b\");\n  result.push(\"images \" + resultSize[1] + \"b\");\n  result.push(\"movies \" + resultSize[2] + \"b\");\n  result.push(\"other \" + resultSize[3] + \"b\");\n  return result;\n}\n")), fileSizeCalitems.length !== 0 ? React.createElement("div", {
+                    }, React.createElement("code", undefined, "function (fileList) {\n  let resultSize = [0, 0, 0, 0];\n  fileList.split(\"\\n\").forEach((list) => {\n    if (list === \"\") {\n      return;\n    }\n\n    const temp = list.split(\" \");\n    if (temp.length !== 2) {\n      return;\n    }\n    \n    const typeArr = temp[0].split(\".\");\n    const type = typeArr[typeArr.length - 1];\n    const size = temp[1].split(\"b\");\n    if (type === \"mp3\" || type === \"aac\" || type === \"flac\") {\n      resultSize[0] += parseInt(size[0]);\n    } else if (type === \"jpg\" || type === \"bmp\" || type === \"gif\") {\n      resultSize[1] += parseInt(size[0]);\n    } else if (type === \"mp4\" || type === \"avi\" || type === \"mkv\") {\n      resultSize[2] += parseInt(size[0]);\n    } else {\n      resultSize[3] += parseInt(size[0]);\n    }\n  });\n\n  let result = [];\n  result.push(\"music \" + resultSize[0] + \"b\");\n  result.push(\"images \" + resultSize[1] + \"b\");\n  result.push(\"movies \" + resultSize[2] + \"b\");\n  result.push(\"other \" + resultSize[3] + \"b\");\n  return result;\n}\n")), fileSizeCalitems.length !== 0 ? React.createElement("div", {
                         className: "transition min-w-[150px] h-[150px] mx-5 mb-3 p-5 bg-red-200 rounded-xl overflow-y-scroll drop-shadow-lg hover:drop-shadow-2xl"
                       }, fileSizeCalitems) : React.createElement(React.Fragment, undefined)));
 }
