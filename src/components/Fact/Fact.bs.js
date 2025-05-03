@@ -44,7 +44,7 @@ var myFacts = [
   },
   {
     id: "fact8",
-    question: "My favourite soccer team is",
+    question: "My favourite football team is",
     answer: "Manchester United"
   },
   {
